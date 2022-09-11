@@ -1,6 +1,6 @@
-package com.sergio.mozpertest.model.dto
+package com.sergio.mozpertest.model.remote.dto
 
-data class Employee(
+data class EmployeeDTO(
     val description: String?,
     val firstName: String?,
     val id: Int?,

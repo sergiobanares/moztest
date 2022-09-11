@@ -1,6 +1,7 @@
-package com.sergio.mozpertest.model
+package com.sergio.mozpertest.model.repository
 
-import com.sergio.mozpertest.model.dto.Business
+import com.sergio.mozpertest.model.remote.BusinessService
+import com.sergio.mozpertest.model.remote.dto.BusinessDTO
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -8,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class BusinessRepositoryImpl : BusinessRepository {
     private val businessService: BusinessService
 
-    override suspend fun fetchBusiness(): Response<Business> = businessService.getBusiness()
+    override suspend fun fetchBusiness(): Response<BusinessDTO> = businessService.getBusiness()
 
     init {
         val retrofit = Retrofit.Builder()
