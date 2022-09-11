@@ -1,26 +1,34 @@
 package com.sergio.mozpertest.model.repository
 
+import com.sergio.mozpertest.model.local.EmployeeDao
+import com.sergio.mozpertest.model.local.LocalEmployee
 import com.sergio.mozpertest.model.remote.BusinessService
-import com.sergio.mozpertest.model.remote.dto.BusinessDTO
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class BusinessRepositoryImpl : BusinessRepository {
-    private val businessService: BusinessService
+class BusinessRepositoryImpl @Inject constructor(
+    private val api: BusinessService,
+    private val localEmployeeDB: EmployeeDao
+) : BusinessRepository {
 
-    override suspend fun fetchBusiness(): Response<BusinessDTO> = businessService.getBusiness()
+    override suspend fun getEmployees(): List<LocalEmployee> =
+        withContext(Dispatchers.IO) {
+            val localEmployees = localEmployeeDB.getAllEmployees()
+            if (localEmployees.isEmpty()) {
+                val business = api.getBusiness()
+                if (business.isSuccessful) {
+                    val data = business.body()!!.employees
+                    localEmployeeDB.insertAlEmployees(*data.map { it.toLocalEmployee() }
+                        .toTypedArray())
+                }
+            }
+            return@withContext localEmployees
+        }
 
-    init {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+    override suspend fun getEmployeeDetail(employeeUID: String): LocalEmployee =
+        withContext(Dispatchers.IO) {
+            return@withContext localEmployeeDB.getEmployee(employeeUID)
+        }
 
-        businessService = retrofit.create(BusinessService::class.java)
-    }
-
-    private companion object {
-        const val BASE_URL = " https://demo3535907.mockable.io/"
-    }
 }
