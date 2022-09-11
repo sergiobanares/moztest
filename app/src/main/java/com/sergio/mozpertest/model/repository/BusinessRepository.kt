@@ -1,10 +1,9 @@
 package com.sergio.mozpertest.model.repository
 
-import com.sergio.mozpertest.model.remote.dto.BusinessDTO
-import retrofit2.Response
+import com.sergio.mozpertest.model.local.LocalEmployee
 
 interface BusinessRepository {
 
-    suspend fun fetchBusiness(): Response<BusinessDTO>
-
+    suspend fun getEmployees(): List<LocalEmployee>
+    suspend fun getEmployeeDetail(employeeUID: String): LocalEmployee
 }

@@ -9,6 +9,6 @@ import androidx.room.PrimaryKey
 data class LocalEmployee(
     @PrimaryKey
     @ColumnInfo(name = "employee_uid")
-    val employeeUID: String,
+    val employeeUID: Int,
 
-)
+    )
