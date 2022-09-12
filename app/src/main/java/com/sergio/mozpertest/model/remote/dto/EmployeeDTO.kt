@@ -10,8 +10,13 @@ data class EmployeeDTO(
     val image: String,
     val lastName: String,
     val rating: Double
-){
+) {
     fun toLocalEmployee() = LocalEmployee(
-        employeeUID = id
+        employeeUID = id,
+        description = description,
+        firstName = firstName,
+        image = image,
+        lastName = lastName,
+        rating = rating
     )
 }

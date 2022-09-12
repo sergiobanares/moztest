@@ -1,8 +1,11 @@
 package com.sergio.mozpertest.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.sergio.mozpertest.di.Constants.BASE_URL
+import com.sergio.mozpertest.domain.login.LoginManager
+import com.sergio.mozpertest.domain.login.LoginManagerImpl
 import com.sergio.mozpertest.model.local.AppDataBase
 import com.sergio.mozpertest.model.local.EmployeeDao
 import com.sergio.mozpertest.model.remote.BusinessService
@@ -29,6 +32,25 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(BusinessService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLoginManager(
+        sharedPreferences: SharedPreferences
+    ): LoginManager {
+        return LoginManagerImpl(sharedPreferences)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(
+        @ApplicationContext context: Context
+    ): SharedPreferences {
+        return context.getSharedPreferences(
+            "MozperPreferences",
+            Context.MODE_PRIVATE
+        )
     }
 
     @Provides
