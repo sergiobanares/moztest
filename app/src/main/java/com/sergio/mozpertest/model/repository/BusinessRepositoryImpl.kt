@@ -14,14 +14,18 @@ class BusinessRepositoryImpl @Inject constructor(
 
     override suspend fun getEmployees(): List<LocalEmployee> =
         withContext(Dispatchers.IO) {
-            val localEmployees = localEmployeeDB.getAllEmployees()
+            var localEmployees = localEmployeeDB.getAllEmployees()
             if (localEmployees.isEmpty()) {
                 val business = api.getBusiness()
                 if (business.isSuccessful) {
                     val data = business.body()!!.employees
-                    localEmployeeDB.insertAlEmployees(*data.map { it.toLocalEmployee() }
-                        .toTypedArray())
+                    localEmployeeDB.insertAlEmployees(
+                        *data.map {
+                            it.toLocalEmployee()
+                        }.toTypedArray()
+                    )
                 }
+                localEmployees = localEmployeeDB.getAllEmployees()
             }
             return@withContext localEmployees
         }
