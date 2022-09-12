@@ -30,6 +30,6 @@ class LoginManagerImpl @Inject constructor(
 
     private companion object {
         const val USER_NAME = "user_name"
-        const val USER_PASSWORD = "user_name"
+        const val USER_PASSWORD = "user_password"
     }
 }

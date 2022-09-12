@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.detail.EmployeeDetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/employee_detail_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitCenter"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <View
+            android:id="@+id/employee_detail_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="16dp"
+            android:background="#EEEEEE" />
+
+
+        <TextView
+            android:id="@+id/employee_detail_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="ID: Employee_UID" />
+
+        <TextView
+            android:id="@+id/employee_detail_full_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Full Name: Pepe" />
+
+        <TextView
+            android:id="@+id/employee_detail_rating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Rating: 3.5" />
+
+        <TextView
+            android:id="@+id/employee_detail_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Description: Lorem" />
+
+    </LinearLayout>
+</ScrollView>

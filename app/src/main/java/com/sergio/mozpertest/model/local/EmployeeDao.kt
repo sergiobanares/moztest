@@ -9,7 +9,7 @@ import androidx.room.Query
 interface EmployeeDao {
 
     @Insert(onConflict = REPLACE)
-    fun insertAlEmployees(vararg localPhoto: LocalEmployee)
+    fun insertAllEmployees(vararg localPhoto: LocalEmployee)
 
     @Query("SELECT * FROM localEmployee WHERE employee_uid LIKE :employeeUID")
     fun getEmployee(employeeUID: String): LocalEmployee

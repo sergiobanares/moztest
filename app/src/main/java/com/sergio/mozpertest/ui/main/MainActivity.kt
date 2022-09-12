@@ -1,50 +1,69 @@
 package com.sergio.mozpertest.ui.main
 
+
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sergio.mozpertest.R
 import com.sergio.mozpertest.databinding.ActivityMainBinding
-import com.sergio.mozpertest.domain.Resource.Fail
-import com.sergio.mozpertest.domain.Resource.Loading
-import com.sergio.mozpertest.domain.Resource.Success
+import com.sergio.mozpertest.domain.login.LoginManager
 import com.sergio.mozpertest.model.local.LocalEmployee
+import com.sergio.mozpertest.ui.base.BaseActivity
+import com.sergio.mozpertest.ui.detail.EmployeeDetailActivity
+import com.sergio.mozpertest.ui.login.LoginActivity
 import com.sergio.mozpertest.ui.main.adapter.EmployeeAdapter
 import com.sergio.mozpertest.ui.main.listener.OnEmployeeClickListener
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+internal class MainActivity : BaseActivity<ActivityMainBinding>() {
 
-    private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
 
+    @Inject
+    lateinit var loginManager: LoginManager
+
+    private val observer = viewStateObserverOf<List<LocalEmployee>>(
+        { employeeList -> loadEmployees(employeeList) },
+        { viewModel.load() }
+    )
+
+    override fun getViewBinding() = ActivityMainBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         configureLayout()
-        setupViewModel()
+        initViewModel()
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id: Int = item.itemId
+        return if (id == R.id.action_exit) {
+            loginManager.logout()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+            true
+        } else super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.actions, menu)
+        return true
+    }
+
+    private fun configureLayout() {
+        binding.employeesRecycler.layoutManager = LinearLayoutManager(this@MainActivity)
+    }
+
+    private fun initViewModel() {
+        viewModel.employeeList.observe(this, observer)
         viewModel.load()
-    }
-
-    private fun setupViewModel() {
-        viewModel.employeeList.observe(this) {
-            hideLoading()
-            when (it) {
-                is Fail -> showErrorScreen(it.message)
-                is Loading -> showLoadingView()
-                is Success -> loadEmployees(it.data)
-            }
-        }
-
-
     }
 
     private fun loadEmployees(data: List<LocalEmployee>?) {
@@ -55,36 +74,14 @@ class MainActivity : AppCompatActivity() {
                 isClickable = true
             }
         }
-
     }
 
     private val employeeClickListener = object : OnEmployeeClickListener {
         override fun onEmployeeClicked(employee: LocalEmployee) {
-            Toast.makeText(
-                this@MainActivity,
-                employee.firstName,
-                Toast.LENGTH_SHORT
-            ).show()
-            /*navigateTo(
+            navigateTo(
                 this@MainActivity,
                 EmployeeDetailActivity.getDeepLink(employee.employeeUID)
-            )*/
+            )
         }
-    }
-
-    private fun showErrorScreen(message: String?) {
-        Toast.makeText(this, "Message: $message", Toast.LENGTH_LONG).show()
-    }
-
-    private fun showLoadingView() {
-        //Show Loading View
-    }
-
-    private fun hideLoading() {
-        //Hide Loading View
-    }
-
-    private fun configureLayout() {
-        binding.employeesRecycler.layoutManager = LinearLayoutManager(this@MainActivity)
     }
 }

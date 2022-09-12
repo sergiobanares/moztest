@@ -19,7 +19,7 @@ class BusinessRepositoryImpl @Inject constructor(
                 val business = api.getBusiness()
                 if (business.isSuccessful) {
                     val data = business.body()!!.employees
-                    localEmployeeDB.insertAlEmployees(
+                    localEmployeeDB.insertAllEmployees(
                         *data.map {
                             it.toLocalEmployee()
                         }.toTypedArray()
