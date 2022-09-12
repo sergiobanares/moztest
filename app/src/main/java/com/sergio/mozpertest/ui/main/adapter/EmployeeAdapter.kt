@@ -10,7 +10,7 @@ import com.sergio.mozpertest.ui.main.listener.OnEmployeeClickListener
 class EmployeeAdapter(
     private val employeeList: List<LocalEmployee>,
     private val listener: OnEmployeeClickListener
-) : RecyclerView.Adapter<EmployeeViewHolder>() {
+) : RecyclerView.Adapter<EmployeeViewHolder>() { // TODO: upgrade to ListAdapter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmployeeViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)

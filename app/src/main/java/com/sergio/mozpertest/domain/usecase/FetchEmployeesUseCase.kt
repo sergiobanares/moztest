@@ -18,8 +18,12 @@ class FetchEmployeesUseCase @Inject constructor(
     operator fun invoke(): Flow<Resource<List<LocalEmployee>>> = flow {
         try {
             emit(Loading<List<LocalEmployee>>())
-            val datesResponse = repository.getEmployees()
-            emit(Success<List<LocalEmployee>>(datesResponse))
+            val response = repository.getEmployees()
+            if (response.isNotEmpty()){
+                emit(Success<List<LocalEmployee>>(response))
+            } else {
+                emit(Fail<List<LocalEmployee>>(message = "no employees found"))
+            }
         } catch (e: HttpException) {
             emit(
                 Fail<List<LocalEmployee>>(
