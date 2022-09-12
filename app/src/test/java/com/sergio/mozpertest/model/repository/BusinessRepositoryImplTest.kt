@@ -6,6 +6,7 @@ import com.sergio.mozpertest.model.local.LocalEmployee
 import com.sergio.mozpertest.model.remote.BusinessService
 import com.sergio.mozpertest.model.remote.dto.BusinessDTO
 import com.sergio.mozpertest.model.remote.dto.EmployeeDTO
+import com.sergio.mozpertest.util.EmployeeUtil.fakeEmployee
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.Dispatchers
@@ -78,15 +79,5 @@ internal class BusinessRepositoryTest : BaseTest() {
             employees
         )
     }
-
-
-    private fun fakeEmployee() = EmployeeDTO(
-        "description",
-        "firstName",
-        1,
-        "image",
-        "lastName",
-        3.5
-    )
 
 }
